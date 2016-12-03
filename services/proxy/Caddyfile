@@ -1,0 +1,29 @@
+localhost
+gzip
+tls off
+
+header / {
+    -Server
+}
+
+proxy / dashboard:8000 {
+    proxy_header Host {host}
+    proxy_header X-Real-IP {remote}
+    proxy_header X-Forwarded-Proto {scheme}
+    websocket
+}
+proxy /s1 service1:8000 {
+    proxy_header Host {host}
+    proxy_header X-Real-IP {remote}
+    proxy_header X-Forwarded-Proto {scheme}
+    websocket
+}
+proxy /s2 service2:8000 {
+    proxy_header Host {host}
+    proxy_header X-Real-IP {remote}
+    proxy_header X-Forwarded-Proto {scheme}
+    websocket
+}
+
+log stdout
+errors stderr

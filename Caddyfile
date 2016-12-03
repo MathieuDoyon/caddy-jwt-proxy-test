@@ -1,0 +1,50 @@
+localhost
+gzip
+tls off
+
+header / {
+    -Server
+}
+
+jwt {
+    path  /s1
+    allow role admin
+    allow role assistant
+}
+jwt {
+    path  /s2
+    allow role admin
+}
+jwt {
+    path  /s3
+    allow role admin
+}
+
+proxy / dashboard:8000 {
+    header_upstream Host {host}
+    header_upstream X-Real-IP {remote}
+    header_upstream X-Forwarded-Proto {scheme}
+    websocket
+}
+proxy /s1 service1:8000 {
+    header_upstream Host {host}
+    header_upstream X-Real-IP {remote}
+    header_upstream X-Forwarded-Proto {scheme}
+    websocket
+
+}
+proxy /s2 service2:8000 {
+    header_upstream Host {host}
+    header_upstream X-Real-IP {remote}
+    header_upstream X-Forwarded-Proto {scheme}
+    websocket
+}
+proxy /s3 service3:8000 {
+    header_upstream Host {host}
+    header_upstream X-Real-IP {remote}
+    header_upstream X-Forwarded-Proto {scheme}
+    websocket
+}
+
+log stdout
+errors stderr

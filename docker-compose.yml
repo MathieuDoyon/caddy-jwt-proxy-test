@@ -1,0 +1,37 @@
+version: '2'
+
+volumes:
+  caddy-tls-certs:
+    driver: local
+
+services:
+  proxy:
+    build: services/proxy
+    ports:
+      - 2015:2015
+    depends_on: [dashboard, service1, service2]
+    volumes:
+      - ./Caddyfile:/etc/Caddyfile
+      - caddy-tls-certs:/root/.caddy:rw
+    environment:
+      - JWT_SECRET=notsosecretkey
+  dashboard:
+    build: services/dashboard
+    command: npm run dev
+    environment:
+      - JWT_SECRET=notsosecretkey
+  service1:
+    build: services/service
+    command: npm run dev
+    environment:
+      - SERVICE_NAME=service 1
+  service2:
+    build: services/service
+    command: npm run dev
+    environment:
+      - SERVICE_NAME=service 2
+  service3:
+    build: services/service
+    command: npm run dev
+    environment:
+      - SERVICE_NAME=service 3
